@@ -2,6 +2,8 @@ package org.gestern.gringotts;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -87,8 +89,12 @@ public enum Configuration {
      * @return the identified item, if successful, or null otherwise.
      */
     private static ItemStack itemByName(String name) {
-        // matchMaterial also works for item ids
-        Material material = Material.matchMaterial(name);
+
+        String namespace = name.replace(":", "_");
+
+        Material material = Material.valueOf(namespace.toUpperCase());
+
+        System.out.println("=================== ITEM MATERIAL :> "+material.toString());
 
         // TODO check for Vault dependency
         if (material != null) {
@@ -103,7 +109,11 @@ public enum Configuration {
      */
     private static String unitName(ItemStack type) {
         if (type.hasItemMeta()) {
+            System.out.println("Has metadata");
+
             ItemMeta meta = type.getItemMeta();
+
+            System.out.println("ITEM META");
 
             if (meta != null) {
                 if (meta.hasDisplayName()) {
@@ -251,6 +261,7 @@ public enum Configuration {
                 } catch (GringottsConfigurationException e) {
                     throw e;
                 } catch (Exception e) {
+                    e.printStackTrace();
                     throw new GringottsConfigurationException("Encountered an error parsing currency. Please check " +
                             "your Gringotts configuration. Error was: " + e.getMessage(), e);
                 }
@@ -325,6 +336,7 @@ public enum Configuration {
                 );
 
             } catch (Exception e) {
+
                 throw new GringottsConfigurationException(
                         "Encountered an error parsing currency. Please check your Gringotts configuration. Error was: "
                                 + e.getMessage(),

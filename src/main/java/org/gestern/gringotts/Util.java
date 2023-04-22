@@ -15,6 +15,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -227,12 +230,22 @@ public final class Util {
      * @return the string
      */
     public static String reformMaterialName(Material material) {
-        String name = material.name();
-        String[] words = name.split("_");
 
-        for (int i = 0; i < words.length; i++) {
-            words[i] = words[i].substring(0, 1).toUpperCase() + words[i].substring(1).toLowerCase();
+        System.out.println("REFORMING MATERIAL NAME");
+
+        String name = material.name();
+
+        System.out.println("MATERIAL NAME "+name);;
+
+        List<String> words = new ArrayList<>(Arrays.asList(name.split("_")));
+
+        words.removeAll(Arrays.asList("", null));
+
+        for (int i = 0; i < words.size(); i++) {
+            words.set(i, words.get(i).substring(0, 1).toUpperCase() + words.get(i).substring(1).toLowerCase());
         }
+
+        System.out.println("REFORMED NAME: "+String.join(" ", words));
 
         return String.join(" ", words);
     }
